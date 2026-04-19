@@ -3,9 +3,422 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Sanju's Cosmic Sanctuary ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-glow: #bc13fe;
+            --secondary-glow: #00ffff;
+            --accent-pink: #ff00ff;
+            --text-color: #ffffff;
+            --glass: rgba(255, 255, 255, 0.07);
+            --pink-glass: rgba(255, 0, 255, 0.15);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100vh; 
+            font-family: 'Poppins', sans-serif;
+            background-color: #020205; /* Solid backup color */
+            background: radial-gradient(circle at center, #11112b 0%, #020205 100%);
+            color: var(--text-color);
+            overflow-x: hidden; 
+            cursor: none; 
+        }
+
+        /* --- CUSTOM CURSOR --- */
+        #cursor {
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            box-shadow: 0 0 15px var(--secondary-glow), 0 0 30px var(--primary-glow);
+            transition: transform 0.1s ease;
+        }
+
+        /* --- VISIBLE BACKGROUND ELEMENTS --- */
+        .nebula {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.4;
+            z-index: -1;
+            animation: pulseNebula 10s infinite alternate ease-in-out;
+        }
+        .nebula-1 { width: 600px; height: 600px; background: var(--primary-glow); top: -10%; left: -10%; }
+        .nebula-2 { width: 600px; height: 600px; background: var(--secondary-glow); bottom: -10%; right: -10%; }
+        .nebula-3 { width: 500px; height: 500px; background: var(--accent-pink); top: 30%; left: 30%; }
+
+        @keyframes pulseNebula {
+            0% { transform: scale(1); opacity: 0.3; }
+            100% { transform: scale(1.3); opacity: 0.6; }
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            z-index: -1;
+            animation: twinkle var(--duration) infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; box-shadow: 0 0 5px white; }
+        }
+
+        /* --- FLOATING EMOJIS --- */
+        .float-emoji {
+            position: fixed;
+            bottom: -100px;
+            font-size: 2rem;
+            user-select: none;
+            pointer-events: none;
+            z-index: 1;
+            animation: floatUp linear forwards;
+        }
+
+        @keyframes floatUp {
+            to {
+                transform: translateY(-120vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* --- UI COMPONENTS --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-card {
+            background: var(--pink-glass);
+            backdrop-filter: blur(15px);
+            border: 2px solid var(--accent-pink);
+            padding: 60px 40px;
+            border-radius: 40px;
+            box-shadow: 0 0 40px rgba(255, 0, 255, 0.3);
+            max-width: 700px;
+            animation: floatCard 4s ease-in-out infinite;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        @keyframes floatCard {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4.5rem;
+            margin: 0;
+            background: linear-gradient(to right, var(--secondary-glow), var(--accent-pink), var(--primary-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px rgba(188, 19, 254, 0.6));
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-top: 15px;
+            opacity: 0.9;
+        }
+
+        #lock-screen {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .lock-box {
+            background: var(--glass);
+            padding: 40px;
+            border-radius: 30px;
+            border: 1px solid var(--primary-glow);
+            text-align: center;
+            box-shadow: 0 0 30px var(--primary-glow);
+        }
+
+        .lock-box input {
+            padding: 15px;
+            border-radius: 10px;
+            border: none;
+            width: 250px;
+            text-align: center;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            outline: none;
+        }
+
+        .gift-container {
+            cursor: pointer;
+            transition: 0.5s;
+            position: relative;
+            margin-top: 30px;
+        }
+
+        .gift-box {
+            font-size: 6rem;
+            filter: drop-shadow(0 0 25px var(--accent-pink));
+            transition: 0.3s;
+        }
+
+        .gift-container:hover .gift-box {
+            transform: scale(1.2) rotate(10deg);
+        }
+
+        #portal {
+            display: none;
+            padding: 80px 20px;
+            text-align: center;
+            opacity: 0;
+            transition: 1s ease-in;
+            position: relative;
+            z-index: 10;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 0;
+        }
+
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 40px 20px;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .card:hover {
+            transform: translateY(-15px) scale(1.05);
+            border-color: var(--secondary-glow);
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .card .icon { font-size: 3.5rem; margin-bottom: 20px; }
+        .card h3 { font-size: 1.6rem; margin-bottom: 10px; }
+        .card p { font-size: 0.9rem; opacity: 0.7; margin-bottom: 20px; }
+
+        .btn {
+            padding: 10px 25px;
+            background: linear-gradient(45deg, var(--primary-glow), var(--accent-pink));
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .footer-msg {
+            margin-top: 100px;
+            margin-bottom: 50px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            opacity: 0.8;
+            text-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        button.unlock-btn {
+            padding: 12px 30px;
+            background: var(--primary-glow);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        button.unlock-btn:hover { transform: scale(1.1); box-shadow: 0 0 20px var(--primary-glow); }
+    </style>
 </head>
 <body>
-    <h1>Hello, World!</h1>
+
+    <div id="cursor"></div>
+    
+    <!-- BACKGROUND ELEMENTS -->
+    <div class="nebula nebula-1"></div>
+    <div class="nebula nebula-2"></div>
+    <div class="nebula nebula-3"></div>
+    <div id="star-field"></div>
+
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="lock-screen">
+        <div class="lock-box">
+            <h2>Enter Secret Key 🔑</h2>
+            <p>Hint: (Enter a word you both know!)</p>
+            <input type="text" id="passwordInput" placeholder="Password...">
+            <br>
+            <button class="unlock-btn" onclick="checkPassword()">Unlock Universe</button>
+        </div>
+    </div>
+
+    <section class="hero" id="hero">
+        <div class="hero-card">
+            <h1>Happy Birthday, Sanju! ✨</h1>
+            <p>You've discovered a secret corner of the galaxy dedicated entirely to you.</p>
+            
+            <div class="gift-container" onclick="openLock()">
+                <div class="gift-box">🎁</div>
+                <div style="font-size: 0.8rem; letter-spacing: 2px; animation: blink 1.5s infinite; margin-top: 10px;">CLICK TO OPEN</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="portal">
+        <h2 style="font-size: 3rem; margin-bottom: 10px;">Sanju's Cosmic Sanctuary 🌌</h2>
+        <p style="opacity: 0.7; margin-bottom: 50px;">Choose a planet to visit...</p>
+
+        <div class="grid">
+            <a href="4. Quiz.html" class="card">
+                <div class="icon">🧩</div>
+                <h3>The Memory Test</h3>
+                <p>A challenge to see if you remember the little things.</p>
+                <div class="btn">Enter Planet</div>
+            </a>
+            <a href="gallary.html" class="card">
+                <div class="icon">📸</div>
+                <h3>Chaotic Gallery</h3>
+                <p>Our most embarrassing and funny photos.</p>
+                <div class="btn">Enter Planet</div>
+            </a>
+            <a href="https://syntaxxxx-error.github.io/sanju-bday3/" class="card">
+                <div class="icon">🎁</div>
+                <h3>The count Down</h3>
+                <p>Letters, secrets, and things I've never said.</p>
+                <div class="btn">Enter Planet</div>
+            </a>
+            <a href="5 .Daily Dose of Compliments.htm" class="card">
+                <div class="icon">✨</div>
+                <h3>Daily Dose</h3>
+                <p>Click here whenever you're feeling down for a compliment!</p>
+                <div class="btn">Enter Planet</div>
+            </a>
+            <a href="Time-Capsule.html" class="card">
+                <div class="icon">⌛</div>
+                <h3>Time Capsule</h3>
+                <p>A message and goals for the future Sanju.</p>
+                <div class="btn">Enter Planet</div>
+            </a>
+            <a href="2. Favour Ticket.html" class="card">
+                <div class="icon">🎟️</div>
+                <h3>The Favor-Book</h3>
+                <p>Digital coupons you can redeem in real life!</p>
+                <div class="btn">Enter Planet</div>
+            </a>
+        </div>
+
+        <div class="footer-msg"> From Heart, By Om ❤️</div>
+    </section>
+
+    <script>
+        const SECRET_PASSWORD = "sanju"; 
+
+        // --- CURSOR ---
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // --- STARS ---
+        function createStars() {
+            const container = document.getElementById('star-field');
+            for (let i = 0; i < 200; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                const size = Math.random() * 3 + 'px';
+                star.style.width = size;
+                star.style.height = size;
+                star.style.top = Math.random() * 100 + 'vh';
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.setProperty('--duration', Math.random() * 3 + 2 + 's');
+                star.style.animationDelay = Math.random() * 5 + 's';
+                container.appendChild(star);
+            }
+        }
+
+        // --- FLOATING EMOJIS ---
+        function spawnEmoji() {
+            const emojis = ['⭐', '🌙', '🚀', '🪐', '🌌', '✨', '☄️', '🛸', '💖'];
+            const emoji = document.createElement('div');
+            emoji.className = 'float-emoji';
+            emoji.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+            emoji.style.left = Math.random() * 100 + 'vw';
+            emoji.style.fontSize = (Math.random() * 20 + 20) + 'px';
+            const duration = Math.random() * 10 + 10;
+            emoji.style.animationDuration = duration + 's';
+            emoji.style.opacity = Math.random() * 0.5 + 0.3;
+            document.body.appendChild(emoji);
+            setTimeout(() => { emoji.remove(); }, duration * 1000);
+        }
+
+        function openLock() {
+            document.getElementById('lock-screen').style.display = 'flex';
+        }
+
+        function checkPassword() {
+            const input = document.getElementById('passwordInput').value.toLowerCase();
+            if (input === SECRET_PASSWORD) {
+                document.getElementById('lock-screen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('lock-screen').style.display = 'none';
+                    unlockUniverse();
+                }, 500);
+            } else {
+                alert("Wrong key! Try again, Sanju! 😺");
+            }
+        }
+
+        function unlockUniverse() {
+            const music = document.getElementById('bgMusic');
+            music.play().catch(e => console.log("Audio interaction required"));
+            document.getElementById('hero').style.opacity = "0";
+            setTimeout(() => {
+                document.getElementById('hero').style.display = "none";
+                const portal = document.getElementById('portal');
+                portal.style.display = "block";
+                setTimeout(() => { 
+                    portal.style.opacity = "1"; 
+                }, 100);
+            }, 1000);
+        }
+
+        createStars();
+        setInterval(spawnEmoji, 600);
+    </script>
 </body>
 </html>
