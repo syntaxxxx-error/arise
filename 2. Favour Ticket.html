@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Cosmic Favor-Book 🎟️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-glow: #bc13fe;
+            --secondary-glow: #00ffff;
+            --accent-pink: #ff00ff;
+            --text-color: #ffffff;
+            --glass: rgba(255, 255, 255, 0.07);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #020205;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Space Background */
+        .space-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, #11112b 0%, #020205 100%);
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: twinkle var(--duration) infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            margin-top: 50px;
+            text-align: center;
+            background: linear-gradient(to right, var(--secondary-glow), var(--accent-pink), var(--primary-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px rgba(188, 19, 254, 0.6));
+        }
+
+        .instructions {
+            text-align: center;
+            opacity: 0.7;
+            margin-bottom: 40px;
+            max-width: 600px;
+            padding: 0 20px;
+        }
+
+        /* TICKET GRID */
+        .ticket-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            width: 90%;
+            max-width: 1100px;
+            padding-bottom: 100px;
+        }
+
+        /* TICKET STYLING */
+        .ticket {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 25px;
+            position: relative;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .ticket:hover {
+            transform: scale(1.05) rotate(1deg);
+            border-color: var(--secondary-glow);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+        }
+
+        .ticket .icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .ticket h3 {
+            font-size: 1.5rem;
+            margin: 10px 0;
+            color: var(--secondary-glow);
+        }
+
+        .ticket p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        /* REDEEM BUTTON */
+        .redeem-btn {
+            padding: 12px 25px;
+            background: linear-gradient(45deg, var(--primary-glow), var(--accent-pink));
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 0 10px var(--accent-pink);
+        }
+
+        .redeem-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px var(--accent-pink);
+        }
+
+        /* USED STATE */
+        .ticket.used {
+            opacity: 0.4;
+            filter: grayscale(1);
+            border-style: solid;
+            pointer-events: none;
+        }
+
+        .ticket.used .redeem-btn {
+            background: #444;
+            box-shadow: none;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background: var(--glass);
+            border: 1px solid white;
+            color: white;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            z-index: 10;
+        }
+        .back-btn:hover {
+            background: white;
+            color: black;
+        }
+
+        /* Hidden form for notifications */
+        #notificationForm {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="back-btn">← Back to Sanctuary</a>
+    <div class="space-bg" id="stars"></div>
+
+    <h1>The Favor-Book 🎟️</h1>
+    <p class="instructions">Welcome to your collection of Golden Tickets! Each ticket is a promise. When you need a favor, click "Redeem" to Redeem em!! ✨</p>
+
+    <div class="ticket-grid" id="ticketGrid">
+        <!-- Tickets will be generated by JavaScript -->
+    </div>
+
+    <!-- HIDDEN FORMSPREE FORM -->
+    <form id="notificationForm" action="https://formspree.io/f/mojpygjz" method="POST">
+        <input type="hidden" name="Voucher_Redeemed" id="voucherName">
+        <input type="hidden" name="Message" value="🚨 Sanju just used a voucher! Be ready! 🚨">
+    </form>
+
+    <script>
+        // --- YOUR FAVORS CONFIGURATION ---
+        const favors = [
+            // I CHANGED the IDs of f1 and f2 to 'f1_renewed' and 'f2_renewed'
+            // This tricks the browser into thinking these are new tickets!
+            { id: 'f1_renewed', icon: '🤐', title: 'The Silence Card', desc: 'I must stop arguing immediately, even if I am 100% right.' },
+            { id: 'f2_renewed', icon: '🍕', title: 'Cravings', desc: 'I must provide a snack or drink of choice, no matter the hour.' },
+            { id: 'f3', icon: '🎬', title: 'Movie Master', desc: 'You get to pick a movie to watch' },
+            { id: 'f4', icon: '💖', title: 'Compliment Storm', desc: 'I must give 5 high-effort, genuine compliments in a row.' },
+            { id: 'f5', icon: '🏳️', title: 'The Sorry Pass', desc: 'A free "I am sorry" from me, Even is I am not at fault' },
+            { id: 'f6', icon: '🍦', title: 'Treat Day', desc: 'I have to take you out for your favorite dessert/ice cream.' },
+            { id: 'f7', icon: '👂', title: 'The Venting Session', desc: 'I must listen to a full vent session without giving any unwanted advice.' },
+            { id: 'f8', icon: '🥤', title: 'The Beverage Bond', desc: 'I must pay for your favorite coffee.' },
+        ];
+
+        function createStars() {
+            const container = document.getElementById('stars');
+            for (let i = 0; i < 150; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                const size = Math.random() * 3 + 'px';
+                star.style.width = size;
+                star.style.height = size;
+                star.style.top = Math.random() * 100 + 'vh';
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.setProperty('--duration', Math.random() * 3 + 2 + 's');
+                container.appendChild(star);
+            }
+        }
+
+        function renderTickets() {
+            const grid = document.getElementById('ticketGrid');
+            const usedTickets = JSON.parse(localStorage.getItem('usedFavors') || '[]');
+
+            grid.innerHTML = "";
+            favors.forEach(favor => {
+                const isUsed = usedTickets.includes(favor.id);
+                const ticket = document.createElement('div');
+                ticket.className = `ticket ${isUsed ? 'used' : ''}`;
+                ticket.innerHTML = `
+                    <div class="icon">${favor.icon}</div>
+                    <h3>${favor.title}</h3>
+                    <p>${favor.desc}</p>
+                    <button class="redeem-btn" onclick="redeemVoucher('${favor.id}', '${favor.title}')">
+                        ${isUsed ? '✓ Redeemed' : 'Redeem Ticket'}
+                    </button>
+                `;
+                grid.appendChild(ticket);
+            });
+        }
+
+        async function redeemVoucher(id, title) {
+            if (confirm(`Are you sure you want to use the ${title} ticket? Once used, it's gone forever! 😱`)) {
+                
+                // 1. Mark as used in LocalStorage
+                let usedTickets = JSON.parse(localStorage.getItem('usedFavors') || '[]');
+                usedTickets.push(id);
+                localStorage.setItem('usedFavors', JSON.stringify(usedTickets));
+
+                // 2. Send "Snitch" Email to Om via Formspree
+                const form = document.getElementById('notificationForm');
+                document.getElementById('voucherName').value = title;
+
+                const formData = new FormData(form);
+                try {
+                    await fetch(form.action, {
+                        method: 'POST',
+                        body: formData,
+                        headers: { 'Accept': 'application/json' }
+                    });
+                    alert(`TICKET REDEEMED! 🎟️\nOm has been notified that you used the "${title}" voucher. Get ready!`);
+                } catch (error) {
+                    console.error("Error sending notification:", error);
+                }
+
+                // 3. Update the UI
+                renderTickets();
+            }
+        }
+
+        createStars();
+        renderTickets();
+    </script>
+</body>
+</html>

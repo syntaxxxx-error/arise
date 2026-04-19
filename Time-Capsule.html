@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Time Capsule ⌛</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-glow: #bc13fe;
+            --secondary-glow: #00ffff;
+            --accent-pink: #ff00ff;
+            --text-color: #ffffff;
+            --glass: rgba(255, 255, 255, 0.07);
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            background: #020205;
+            color: var(--text-color);
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        #cursor {
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            box-shadow: 0 0 15px var(--secondary-glow), 0 0 30px var(--primary-glow);
+            transition: transform 0.1s ease;
+        }
+
+        /* --- BACKGROUND --- */
+        #universe {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; /* Stays behind everything */
+            background: radial-gradient(circle at center, #11112b 0%, #020205 100%);
+        }
+
+        .nebula {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.3;
+            z-index: -1;
+            animation: pulse 10s infinite alternate ease-in-out;
+        }
+        .nebula-1 { width: 600px; height: 600px; background: var(--primary-glow); top: -10%; left: -10%; }
+        .nebula-2 { width: 600px; height: 600px; background: var(--secondary-glow); bottom: -10%; right: -10%; }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.3; }
+            100% { transform: scale(1.3); opacity: 0.6; }
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: twinkle var(--duration) infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* --- MAIN UI --- */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 60px 20px;
+            position: relative;
+            z-index: 10; /* High z-index to ensure buttons are clickable */
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, var(--secondary-glow), var(--accent-pink), var(--primary-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px var(--primary-glow));
+        }
+
+        .motivation {
+            font-style: italic;
+            opacity: 0.7;
+            margin-bottom: 40px;
+            text-align: center;
+            max-width: 600px;
+            font-weight: 300;
+        }
+
+        .input-wrapper {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 40px;
+            display: flex;
+            gap: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            margin-bottom: 60px;
+            position: relative;
+            z-index: 20;
+        }
+
+        input {
+            flex: 1;
+            padding: 15px;
+            border-radius: 20px;
+            border: 1px solid var(--secondary-glow);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .add-btn {
+            padding: 0 25px;
+            background: linear-gradient(45deg, var(--primary-glow), var(--accent-pink));
+            border: none;
+            border-radius: 20px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+            z-index: 21;
+        }
+
+        .add-btn:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--accent-pink); }
+
+        .vault {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 60px;
+        }
+
+        .fragment {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 15px 25px;
+            border-radius: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: popIn 0.4s ease-out forwards;
+            transition: 0.3s;
+            border-left: 5px solid var(--secondary-glow);
+            position: relative;
+            z-index: 20;
+        }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #ff4d4d;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            position: relative;
+            z-index: 21;
+        }
+
+        .seal-btn {
+            padding: 20px 60px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            background: linear-gradient(45deg, var(--primary-glow), var(--secondary-glow));
+            border: none;
+            border-radius: 50px;
+            color: white;
+            cursor: pointer;
+            transition: 0.4s;
+            box-shadow: 0 0 20px var(--primary-glow);
+            position: relative;
+            z-index: 20;
+        }
+
+        .seal-btn:hover { transform: scale(1.1); box-shadow: 0 0 40px var(--secondary-glow); }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background: var(--glass);
+            border: 1px solid white;
+            color: white;
+            border-radius: 10px;
+            text-decoration: none;
+            z-index: 100;
+        }
+
+        #seal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            flex-direction: column;
+        }
+
+        .capsule-core {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 50px var(--secondary-glow), 0 0 100px var(--primary-glow);
+            animation: corePulse 1s ease-in-out infinite;
+        }
+
+        @keyframes corePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="back-btn">← Back to Sanctuary</a>
+    <div id="cursor"></div>
+    
+    <div id="universe">
+        <div class="nebula nebula-1"></div>
+        <div class="nebula nebula-2"></div>
+        <div id="star-field"></div>
+    </div>
+
+    <div class="container">
+        <h1>Cosmic Time Capsule ⌛</h1>
+        <div class="motivation" id="quote">"Your potential is as infinite as the universe itself."</div>
+
+        <div class="input-wrapper">
+            <input type="text" id="goalInput" placeholder="Enter a dream or future goal... ✨">
+            <button id="addBtn" class="add-btn">Add Goal</button>
+        </div>
+
+        <div class="vault" id="vault"></div>
+
+        <button id="sealBtn" class="seal-btn">Seal the Vault 🔒</button>
+    </div>
+
+    <div id="seal-overlay">
+        <div class="capsule-core"></div>
+        <h2 style="margin-top: 30px; font-family: 'Dancing Script'; font-size: 2rem;">Compressing Dreams...</h2>
+    </div>
+
+    <script>
+        // Wait for the whole page to load before running script
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            const cursor = document.getElementById('cursor');
+            const goalInput = document.getElementById('goalInput');
+            const addBtn = document.getElementById('addBtn');
+            const sealBtn = document.getElementById('sealBtn');
+            const vault = document.getElementById('vault');
+            
+            // CURSOR
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            });
+
+            // STARS
+            function createStars() {
+                const field = document.getElementById('star-field');
+                for (let i = 0; i < 150; i++) {
+                    const star = document.createElement('div');
+                    star.className = 'star';
+                    const size = Math.random() * 3 + 'px';
+                    star.style.width = size;
+                    star.style.height = size;
+                    star.style.top = Math.random() * 100 + 'vh';
+                    star.style.left = Math.random() * 100 + 'vw';
+                    star.style.setProperty('--duration', Math.random() * 3 + 2 + 's');
+                    field.appendChild(star);
+                }
+            }
+            createStars();
+
+            // GOALS
+            let goals = JSON.parse(localStorage.getItem('cosmicGoals')) || [];
+
+            function updateVault() {
+                vault.innerHTML = "";
+                goals.forEach((goal, index) => {
+                    const div = document.createElement('div');
+                    div.className = 'fragment';
+                    div.innerHTML = `
+                        <span>${goal}</span>
+                        <button class="delete-btn" data-index="${index}">×</button>
+                    `;
+                    vault.appendChild(div);
+                });
+                localStorage.setItem('cosmicGoals', JSON.stringify(goals));
+            }
+
+            // Add Goal logic
+            addBtn.addEventListener('click', () => {
+                const val = goalInput.value.trim();
+                if (val === "") return;
+                goals.push(val);
+                goalInput.value = "";
+                updateVault();
+            });
+
+            // Enter key logic
+            goalInput.addEventListener("keypress", (e) => {
+                if (e.key === "Enter") addBtn.click();
+            });
+
+            // Delete goal logic
+            vault.addEventListener('click', (e) => {
+                if (e.target.classList.contains('delete-btn')) {
+                    const index = e.target.getAttribute('data-index');
+                    goals.splice(index, 1);
+                    updateVault();
+                }
+            });
+
+            // Seal logic
+            sealBtn.addEventListener('click', () => {
+                if (goals.length === 0) {
+                    alert("The vault is empty! Please add some dreams first. ✨");
+                    return;
+                }
+                const overlay = document.getElementById('seal-overlay');
+                overlay.style.display = 'flex';
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                    alert("The Vault is now sealed! Your dreams are safely locked in the stars. Keep pushing forward! 🌟");
+                }, 3000);
+            });
+
+            // Motivational Quotes
+            const quotes = [
+                "Your potential is as infinite as the universe itself.",
+                "Every dream is a seed that will one day bloom into reality.",
+                "Believe in your strength; you are capable of amazing things.",
+                "The road to success is built one dream at a time.",
+                "You have the power to turn your aspirations into achievements.",
+                "Keep shining; the world needs your unique light.",
+                "Determination is the key that unlocks every door.",
+                "Dream big, work hard, and stay true to yourself."
+            ];
+            document.getElementById('quote').innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
+
+            updateVault();
+        });
+    </script>
+</body>
+</html>
